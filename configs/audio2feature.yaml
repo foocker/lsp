@@ -39,6 +39,17 @@ APC_frame_history: 0
 audiofeature_input_channels: 80
 output_size: 87   # 29*3
 
+APC_infer:
+  ckp_path: './data/APC_epoch_160.model'
+  mel_dim: 80
+  hidden_size: 512
+  num_layers: 3
+  residual: false   # training is not Flase 
+  use_LLE: 1
+  Knear: 10
+  LLE_percent: 1
+use_LLE: True
+
 
 # LSTM 
 LSTM_hidden_size: 256
@@ -59,9 +70,9 @@ output_dir: '/home/xx/lsp/data/hk_fake_38/checkpoints'
 train:
   resume: True
   max_epochs: 15
-  max_steps: 2000
+  checkpoint_steps: 4 
   log_steps: 10
-  vis_steps: 500
-  checkpoint_steps: 100
-  val_steps: 500
-  eval_steps: 1000
+
+
+infer_file: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Audio2Feature.tar'
+test_audio: '/home/youkia/lsp/data/hk_fake_38/video_audio/Mayun.wav'
