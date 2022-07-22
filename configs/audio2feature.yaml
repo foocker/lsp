@@ -74,5 +74,5 @@ train:
   log_steps: 10
 
 
-infer_file: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Audio2Feature.tar'
-test_audio: '/home/youkia/lsp/data/hk_fake_38/video_audio/Mayun.wav'
+infer_file: '/home/xx/lsp/data/hk_fake_38/checkpoints/Audio2Feature.tar'
+test_audio: '/home/xx/lsp/data/hk_fake_38/video_audio/Mayun.wav'

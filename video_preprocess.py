@@ -17,17 +17,20 @@ def parser_json(jp):
 
     return kp
         
-def img2video(image_folder, video_name, img_format='png'):
+def img2video(image_folder, video_name, img_format='png', fps=60.0):
+    f = lambda x: float(x.split('_')[-1][:-4])  # case by case
     images = [img for img in os.listdir(image_folder) if img.endswith(".{}".format(img_format))]
+    images = sorted(images, key=f)
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
+    fourcc = cv2.VideoWriter_fourcc(*'MP4v')
 
-    video = cv2.VideoWriter(video_name, 0, 1, (width, height))
+    video = cv2.VideoWriter(video_name, fourcc, fps, (width, height), True)
 
     for image in images:
-        video.write(cv2.imread(os.path.join(image_folder, image)))
+        img = cv2.imread(os.path.join(image_folder, image))
+        video.write(img)
 
-    # cv2.destroyAllWindows()
     video.release()
 
     print("Succeeds!")
