@@ -1,0 +1,3 @@
+[submodule "otherlib/superpose4d"]
+	path = otherlib/superpose4d
+	url = https://github.com/jewettaij/superpose3d.git

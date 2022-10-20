@@ -1,11 +1,11 @@
 isTrain: True
-task: 'Audio2Headpose'  # Audio2Headpose, Audio2Feature, Feature2Face
+task: 'Audio2Feature'  # Audio2Headpose, Audio2Feature, Feature2Face
 gpu_ids: [0]
 continue_train: False
 task_block: 'audio'  # audio, face
 
 # data info 
-data_dir: '/home/youkia/lsp/data/hk_fake_38'
+data_dir: '/home/youkia/lsp/data/hk_fake_8_14'
 d3label_dir: 'label'  # all info from 3d face tracking lsp needed
 original_dir: 'video_audio'  # handled video and audio (512*512, 60fps)
 imgs_dir: 'imgs'  # imgs from original_dir
@@ -34,7 +34,7 @@ audio_windows: 2
 audio_encoder: 'APC'
 APC_audio_person: 'who_say'
 APC_audio_person_version: 'who_say_vx'
-re_audio_encoder: False  # when changed the scripts
+re_audio_encoder: True  # when changed the scripts
 
 APC_hidden_size: 512
 APC_rnn_layers: 3
@@ -53,7 +53,8 @@ APC_infer:
   use_LLE: 0
   Knear: 10
   LLE_percent: 1
-use_LLE: False
+use_LLE: True
+
 
 # LSTM 
 LSTM_hidden_size: 256
@@ -65,7 +66,6 @@ LSTM_sequence_length: 60
 
 # A2L_receptive_field: 30
 A2H_receptive_field: 30
-
 
 # WaveNet
 A2H_wavenet_residual_layers: 7
@@ -85,34 +85,34 @@ A2H_GMM_sigma_min: 0.03
 smooth_loss: 0
 
 # weights
-checkpoints: ''
-ck_add_info: 'Feature2Face'  # headpose, Audio2Feature, Feature2Face
+# checkpoints: './data/hk_fake_8_14/checkpoints/Audio2Feature/Audio2Feature_290.tar'
+checkpoints: './data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
+# checkpoints: ''
+ck_add_info: 'Audio2Feature'  # headpose, Audio2Feature, Feature2Face
 
-lr: 0.00001
+lr: 0.0001
 lr_policy: 'cosine'
-batch_size: 6   # audio 360, face: 6
-pretrained_modelpath: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
-# pretrained_modelpath: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Feature2Face/Audio2Feature_56.tar'
+batch_size: 360   # audio 360, face: 6
+pretrained_modelpath: ''
 
-output_dir: '/home/youkia/lsp/data/hk_fake_38/checkpoints'
+output_dir: './data/hk_fake_8_14/checkpoints'
 
 train:
   resume: True
-  max_epochs: 200
-  checkpoint_steps: 4 
+  max_epochs: 251
+  checkpoint_steps: 10
   log_steps: 10
   n_epochs: 3
 
 infer_a: True
 infer_h: True
 infer_g: True
-infer_file_a: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
-infer_file_h: './data/hk_fake_38/checkpoints/Audio2Headpose/headpose_116.tar'
-infer_file_g: './data/hk_fake_8_14/checkpoints/Feature2Face/Feature2Face_20.tar'  # 38
-# infer_file_g: '/home/youkia/lsp/data/hk_fake_8_14/checkpoints/Feature2Face/Feature2Face_20.tar'  # 814
-test_audio: '/home/youkia/lsp/data/hk_fake_38/video_audio/Mayun.wav'
+infer_file_a: './data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
+infer_file_h: ''
+infer_file_g: './data/hk_fake_8_14/checkpoints/Feature2Face/Feature2Face_20.tar'
+test_audio: './data/hk_fake_8_14/video_audio/Mayun.wav'
 
-loss_file: '/home/youkia/lsp/data/hk_fake_38/checkpoints/loss_feature2face.txt'
+loss_file: './data/hk_fake_8_14/checkpoints/loss_Audio2Feature.txt'
 
 # ---- GAN --------
 size: 'normal'
@@ -139,23 +139,23 @@ no_ganFeat: True
 no_vgg: False
 sparse_D: True
 fp16: False
-img_dir: './data/hk_fake_38/imgs'
-label_dir: './data/hk_fake_38/label'
-candidates: './data/hk_fake_38/candidates'
+img_dir: './data/hk_fake_8_14/imgs'
+label_dir: './data/hk_fake_8_14/label'
+candidates: './data/hk_fake_8_14/candidates'
 frame_jump: 1
 shoulder: False
 loadSize: 512
-gan_sample_dir: './data/hk_fake_38/g_sample'
-test_gan_dir: './data/hk_fake_38/test_gan'
+gan_sample_dir: './data/hk_fake_8_14/g_sample'
+test_gan_dir: './data/hk_fake_8_14/test_gan'
 
-test_all_dir: './data/hk_fake_38/test_all'
-test_train_dir: './data/hk_fake_38/test_train'
-infer_dir: './data/hk_fake_38/infer_temp'
+test_all_dir: './data/hk_fake_8_14/test_all'
+test_train_dir: './data/hk_fake_8_14/test_train'
+infer_dir: './data/hk_fake_8_14/infer_temp'
 rm_infer_temp: False
 
-Feat_smooth_sigma: 2
+Feat_smooth_sigma: 10
 AMP_method: 'XYZ'  # XYZ, LowerMore, CloseSmall, XY, delta
-Feat_AMPs: [1.5, 2.5, 1.5]
+Feat_AMPs: [1.5, 1.5, 1.5]
 
 Headpose:
     ckp_path: './data/x'
@@ -165,7 +165,7 @@ Headpose:
     shoulder_AMP: 0.5
 
 test_mode:
-  headpose: True
+  headpose: False
   only_pred: False
   pred_normal: True
   mouth_smooth: True

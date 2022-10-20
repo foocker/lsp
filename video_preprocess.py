@@ -17,15 +17,15 @@ def parser_json(jp):
 
     return kp
         
-def img2video(image_folder, video_name, img_format='png', fps=60.0):
-    f = lambda x: float(x.split('_')[-1][:-4])  # case by case
+def img2video(image_folder, video_name, img_format='png'):
+    f = lambda x: float(x.split('_')[-1][:-4])  # change by name
     images = [img for img in os.listdir(image_folder) if img.endswith(".{}".format(img_format))]
     images = sorted(images, key=f)
     frame = cv2.imread(os.path.join(image_folder, images[0]))
     height, width, layers = frame.shape
     fourcc = cv2.VideoWriter_fourcc(*'MP4v')
 
-    video = cv2.VideoWriter(video_name, fourcc, fps, (width, height), True)
+    video = cv2.VideoWriter(video_name, fourcc, 60.0, (width, height), True)
 
     for image in images:
         img = cv2.imread(os.path.join(image_folder, image))
@@ -224,7 +224,8 @@ class FAN(object):
         vp_dir = os.path.dirname(vp)
         scaled_vp  = os.path.join(vp_dir , 'half_' +  os.path.basename(vp))
         if max(wx_sacled, hy_scaled) > keep_size[0]:
-            cmd = f'ffmpeg -i {vp} -vf scale=iw/2:ih/2 {scaled_vp}'
+            cmd = f'ffmpeg -i {vp} -strict -2 -vf scale=iw/2:ih/2 {scaled_vp}'
+            print(cmd)
             subprocess.call([cmd], shell=True)
         if os.path.exists(scaled_vp):
             wx_sacled //= 2
@@ -241,12 +242,14 @@ class FAN(object):
         pad_y = (keep_size[1] - hy_scaled) // 2
         position = (max(l - pad_x, 0), max(0, t - pad_y))  # can add w, h check
         croped_vp = os.path.join(vp_dir, 'croped_' + os.path.basename(crop_vp))
+        print(croped_vp)
         
         print(pad_x, pad_y, position)
         
         cmd = f'ffmpeg -i {crop_vp} -strict -2 -vf crop=w={keep_size[0]}:h={keep_size[1]}:x={position[0]}:y={position[1]} {croped_vp}'
         subprocess.call(cmd, shell=True)
         print('croped successed!')
+        return croped_vp
         
     def video_read_message(self, vp):
         if not os.path.exists(vp):
@@ -273,8 +276,10 @@ class FAN(object):
         name = os.path.basename(vd).split(".")[0]
         print(name, os.path.abspath(vd))
         # ffmpeg -i ./video/kanghui_5.mp4  -r 60 -acodec aac -vcodec h264 ./video/kanghui5__60fps.mp4
-        cmd = f'ffmpeg -i {vd} -strict -2 -r 60 -acodec aac -vcodec h264 {name}_60fps.mp4'
+        result_file = os.path.join(os.path.dirname(vd), f'{name}_60fps.mp4')
+        cmd = f'ffmpeg -i {vd} -strict -2 -r 60 -acodec aac -vcodec h264 {result_file}'
         subprocess.call([cmd], shell=True)
+        return result_file
 
 
     def extract_audio(self, vp, sr=16000):
@@ -307,8 +312,9 @@ class FAN(object):
         pass
     
     def extract_imgs(self, vp, dst_dir):
-        name = os.path.basename(vp).split('.')[0]
-        cmd = f'ffmpeg -i {vp} -strict -2  -filter:v fps=60 {os.path.join(dst_dir, name)}_%0d.png'
+        # name = os.path.basename(vp).split('.')[0]
+        # cmd = f'ffmpeg -i {vp} -strict -2  -filter:v fps=60 {os.path.join(dst_dir, name)}_%0d.png'
+        cmd = f'ffmpeg -i {vp} -strict -2  -filter:v fps=60 {dst_dir}/%0d.png'
         subprocess.call([cmd], shell=True)
         print("Successed")
         bash = f'ls {dst_dir} | wc -l'
@@ -327,7 +333,17 @@ class FAN(object):
 
 if __name__ == "__main__":
     # vp = './hk_fake_38_half.mp4'
-    vp = './croped_hk_fake_38_half_60fps.mp4'
+    # vp = './croped_hk_fake_38_half_60fps.mp4'
+    # vp = './data/hk_fake_38/test_mouth_new.mp4'
+    # vp = './data/hk_fake_38/original_landmarks.mp4'
+    # vp = './data/hk_fake_38/landmarks3d_fixed_countour_nose.mp4'
+    # vp = './data/hk_fake_38/test_all_train_add_headpose.mp4'
+    croped_vp = './data/hk_fake_8_14/croped_half_hk_fake_8_14_60fps.mp4'
+    dst_dir = '/home/youkia/DECA/DECA/hk_fake_8_14_imgs'
+    
+    # wav = './data/hk_fake_38/video_audio/audio.wav'
+    # wav = './data/hk_fake_38/video_audio/Mayun.wav'
+    
     # img2video('./imgs', './video/kanghui_5_10.avi')
     # kp = parser_json('./kanghui_5_1.json')
     # kp = parser_json('./kanghui_5_60fps_crop_512_1.json')
@@ -337,10 +353,14 @@ if __name__ == "__main__":
     # x = np.load('./kp_save_girl/shoulder_2D.npy')
     # print(x.shape)
 
-    # fan = FAN()
-    # fan.crop_video_letterbox(vp, face_head_scale=1.5)
-    # fan.video_read_message(vp)
-    # fan.change_vd_fps(vp)
-    # fan.extract_audio(vp)
-    # fan.merge_audio_video()
+    fan = FAN()
+    # croped_vp = fan.crop_video_letterbox(vp, face_head_scale=1.5)
+    # fan.video_read_message(croped_vp)
+    # result_file = fan.change_vd_fps(croped_vp)
+    # fan.video_read_message(result_file)
+    # fan.video_read_message(croped_vp)
+    fan.extract_imgs(croped_vp, dst_dir)
+    
+    # fan.extract_audio(croped_vp)
+    # fan.merge_audio_video(vp, wav)
     # merge_audio_video('noaudio_croped_hk_fake_38_half_60fps.mp4', 'croped_hk_fake_38_half_60fps.wav')

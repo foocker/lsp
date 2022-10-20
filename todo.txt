@@ -1,0 +1,6 @@
+其他细节调节
+
+conclusion:
+1. use the traing landmark but replace its mouth, the gernerate quality is not bad.
+2. the gap is the traing landmark diff in distribution with the pred landmark, which is fixed
+3. op headpose, may use some fix Camere parameters

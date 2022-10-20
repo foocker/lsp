@@ -17,7 +17,6 @@ class AffineNetwork(nn.Module):
 
         
     def forward(self, x):
-        # print(x.shape, self.affine_matrix.shape)
         out = torch.mm(self.affine_matrix, x.transpose(0, 1)).transpose(0, 1)
         orthogonal = torch.mm(self.affine_matrix[:3, :3], self.affine_matrix[:3, :3].transpose(0,1).contiguous())
         last_raw = self.affine_matrix[-1, :]
@@ -107,7 +106,7 @@ def train(i):
     return affine_matrix
 
 
-def fix_contur_AffineNetwork():
+def fix_contur_AffineNetwork(fourdim=False):
     from lib.utils.visisual import plot_kpts
     def ndc2img(landmarks3d):
     
@@ -123,11 +122,23 @@ def fix_contur_AffineNetwork():
     affine_matrixes = np.load('./data/hk_fake_38/label/3d_fit_data_affine_matrix.npy')
 
     img = np.zeros((512, 512, 3),  dtype=np.uint8)
+    if fourdim:
+        homocoord = np.concatenate((pts_3d, np.ones((pts_3d.shape[0], pts_3d.shape[1], 1))), axis=2)
+        # homocoord = np.append(pts_3d, np.ones((pts_3d.shape[0], pts_3d.shape[1], 1)), axis=2)
+    else:
+        homocoord = pts_3d
     for i in range(pts_3d.shape[0]):
-        R = affine_matrixes[i][:3,:3]
-        T = affine_matrixes[i][:3, 3:]
-        translate_rotation = np.dot(R, pts_3d[i]) + T 
-        points = ndc2img(translate_rotation)
+        
+        if fourdim:
+            translate_rotation = np.dot(affine_matrixes[i], homocoord[i].T)
+            translate_rotation[:3, :] /= translate_rotation[3, :]
+            points = ndc2img(translate_rotation[:3,:].T)
+        else:
+            R = affine_matrixes[i][:3,:3]
+        
+            T = affine_matrixes[i][:3, 3:]
+            translate_rotation = np.dot(R, homocoord[i].T) + T
+            points = ndc2img(translate_rotation.T)
         img_edge = plot_kpts(img, points)
         yield img_edge
     
@@ -138,17 +149,20 @@ def affine_infer():
     frames2video('orignal_pts3d_trans_rotation_AffineNetwork.mp4', frames)
 
 
+
 if __name__ == '__main__':
-    affine_matrix = []
-    path = './data/hk_fake_38/label/3d_fit_data.npz'
-    data_info = np.load(path)
-    pts_3d = data_info['pts_3d']
-    for i in tqdm(range(pts_3d.shape[0])):
-        affine_matrix_i = train(i)
-        affine_matrix.append(affine_matrix_i)
-    np.save('./data/hk_fake_38/label/3d_fit_data_affine_matrix.npy', affine_matrix)
+    # affine_matrix = []
+    # path = './data/hk_fake_38/label/3d_fit_data.npz'
+    # data_info = np.load(path)
+    # pts_3d = data_info['pts_3d']
+    # for i in tqdm(range(pts_3d.shape[0])):
+    #     affine_matrix_i = train(i)
+    #     affine_matrix.append(affine_matrix_i)
+    # np.save('./data/hk_fake_38/label/3d_fit_data_affine_matrix.npy', affine_matrix)
     print("Get all affine matrix!")
     
-    affine_infer()
+    # affine_infer()
+    
+    
     
     print("Successed!")
