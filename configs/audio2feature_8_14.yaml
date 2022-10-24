@@ -5,7 +5,7 @@ continue_train: False
 task_block: 'audio'  # audio, face
 
 # data info 
-data_dir: '/home/youkia/lsp/data/hk_fake_8_14'
+data_dir: '/home/yourname/lsp/data/hk_fake_8_14'
 d3label_dir: 'label'  # all info from 3d face tracking lsp needed
 original_dir: 'video_audio'  # handled video and audio (512*512, 60fps)
 imgs_dir: 'imgs'  # imgs from original_dir

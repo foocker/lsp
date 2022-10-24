@@ -5,7 +5,7 @@ continue_train: False
 task_block: 'audio'  # audio, face
 
 # data info 
-data_dir: '/home/youkia/lsp/data/hk_fake_38'
+data_dir: '/home/yourname/lsp/data/hk_fake_38'
 d3label_dir: 'label'  # all info from 3d face tracking lsp needed
 original_dir: 'video_audio'  # handled video and audio (512*512, 60fps)
 imgs_dir: 'imgs'  # imgs from original_dir
@@ -91,10 +91,10 @@ ck_add_info: 'Feature2Face'  # headpose, Audio2Feature, Feature2Face
 lr: 0.00001
 lr_policy: 'cosine'
 batch_size: 6   # audio 360, face: 6
-pretrained_modelpath: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
-# pretrained_modelpath: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Feature2Face/Audio2Feature_56.tar'
+pretrained_modelpath: '/home/yourname/lsp/data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
+# pretrained_modelpath: '/home/yourname/lsp/data/hk_fake_38/checkpoints/Feature2Face/Audio2Feature_56.tar'
 
-output_dir: '/home/youkia/lsp/data/hk_fake_38/checkpoints'
+output_dir: '/home/yourname/lsp/data/hk_fake_38/checkpoints'
 
 train:
   resume: True
@@ -106,13 +106,13 @@ train:
 infer_a: True
 infer_h: True
 infer_g: True
-infer_file_a: '/home/youkia/lsp/data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
+infer_file_a: '/home/yourname/lsp/data/hk_fake_38/checkpoints/Audio2Feature/Audio2Feature_196.tar'
 infer_file_h: './data/hk_fake_38/checkpoints/Audio2Headpose/headpose_116.tar'
 infer_file_g: './data/hk_fake_8_14/checkpoints/Feature2Face/Feature2Face_20.tar'  # 38
-# infer_file_g: '/home/youkia/lsp/data/hk_fake_8_14/checkpoints/Feature2Face/Feature2Face_20.tar'  # 814
-test_audio: '/home/youkia/lsp/data/hk_fake_38/video_audio/Mayun.wav'
+# infer_file_g: '/home/yourname/lsp/data/hk_fake_8_14/checkpoints/Feature2Face/Feature2Face_20.tar'  # 814
+test_audio: '/home/yourname/lsp/data/hk_fake_38/video_audio/Mayun.wav'
 
-loss_file: '/home/youkia/lsp/data/hk_fake_38/checkpoints/loss_feature2face.txt'
+loss_file: '/home/yourname/lsp/data/hk_fake_38/checkpoints/loss_feature2face.txt'
 
 # ---- GAN --------
 size: 'normal'

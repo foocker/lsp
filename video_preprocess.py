@@ -339,7 +339,7 @@ if __name__ == "__main__":
     # vp = './data/hk_fake_38/landmarks3d_fixed_countour_nose.mp4'
     # vp = './data/hk_fake_38/test_all_train_add_headpose.mp4'
     croped_vp = './data/hk_fake_8_14/croped_half_hk_fake_8_14_60fps.mp4'
-    dst_dir = '/home/youkia/DECA/DECA/hk_fake_8_14_imgs'
+    dst_dir = '/home/yourname/DECA/DECA/hk_fake_8_14_imgs'
     
     # wav = './data/hk_fake_38/video_audio/audio.wav'
     # wav = './data/hk_fake_38/video_audio/Mayun.wav'

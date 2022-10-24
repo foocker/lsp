@@ -1,5 +1,5 @@
 # path = './configs/hk_fake_38.yaml'
-path = './configs/audio2feature.yaml'
+path = "./configs/audio2feature.yaml"
 
 
 from lib.config.config import Config
