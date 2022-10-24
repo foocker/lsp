@@ -8,6 +8,7 @@ python test_config.py
 
 ## data preprocess
 training data structure:
+```
 data
 -- video_name
   -- APC
@@ -21,6 +22,7 @@ data
     --mean_pts_3d.npy
     --...
   --video_audio
+```
 
 ```
 python video_preprocess.py
