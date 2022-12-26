@@ -70,6 +70,7 @@ python test_xx.py
 1. audio2landmark, data process, like landmarks aligement you can try:
 [noise_resilient_3dtface](https://github.com/eeskimez/noise_resilient_3dtface) or others
 2. change other 3d face reconstruction alg.
+3. [new preprocess may you can reference](https://deepimagination.cc/SPACEx/)
 
 ## portrait rights
 the result video only for academic test, the original resource comes from bilibili. 
