@@ -79,3 +79,6 @@ python test_xx.py
 
 ## portrait rights
 the result video only for academic test, the original resource comes from bilibili. 
+
+## some details are wrong
+In some places, if you look at the code, the problem is not big. I'll try again when I'm free. 
