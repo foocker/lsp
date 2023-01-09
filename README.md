@@ -11,17 +11,17 @@ training data structure:
 ```
 data
 -- video_name
-  -- APC
+  -- APC  # the featrure get(infer) from the given apc model.
     --xx_APC_feature_xxx.npy
   --checkpoints
-  --imgs
-  --candidates
-  --g_sample
-  --label
+  --imgs  # all preprocessed img from your video.
+  --candidates  # random 4 img from imgs
+  --g_sample # generator model's tranining img for test(eye) the g_model
+  --label # some 3d trainning data act as label from 3d tracking(reconstruct) alg, here is deca.
     --3d_fit_data.npz
     --mean_pts_3d.npy
     --...
-  --video_audio
+  --video_audio  # your video(mp4) and audio file(wav).
 ```
 
 ```
@@ -36,6 +36,11 @@ python video_preprocess.py
     1. using deca to extract useful information 
     2. cd otherlib/deca
     sh run.sh
+      2.1. before you run sh run.sh , you should pip install -r requriments.txt
+      2.2 you can choose another conda env, or you can change the package version from requriments.txt 
+      2.3 you can change the parameters in run.sh
+      2.4 diff name, you may change the lambda func in datasets.py
+
 
 ```
 ## train
