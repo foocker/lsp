@@ -68,6 +68,7 @@ python test_xx.py
 ```
 
 ## gallery
+the audio2landmarks is from training data, the g and other are the trained model. the result as follows:
 ![生成landmarks](./test_results/test_mouth_change1_LLE.gif)
 ![生成结果视频](./test_results/test_using_trainlandmarks.gif)
 
